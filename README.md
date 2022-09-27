@@ -9,10 +9,12 @@ configure a non-root user in the Dockerfile.
 
 ## Building the image
 
-To build the image, you'll need to:
-
-1. Place your public and private SSH keys in the `.ssh/` directory.
-2. Build the container while providing two git configuration arguments:
+To build the image, you'll need to place your public and private SSH key in the
+`.ssh/` directory. This SSH key should ideally be known to and trusted by your
+remote. For example, in GitHub you should navigate to
+`Account > Settings > SSH and GPG keys` and add the public key as a new
+`SSH Key` and signing key. Then, pass your name and email to configure git
+inside the container:
 
 ```bash
 docker build \

@@ -55,7 +55,7 @@ RUN set -ex && \
     pip install pipenv && \
     pipenv install && \
     # Install vim-plug and load plugins
-    curl -fLo ~/.config/nvim/site/autoload/plug.vim \
+    curl -fLo ~/.config/nvim/site/autoload/plug.vim --create-dirs \
         https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim && \
     nvim --headless +PlugInstall +qa && \
     # Install coc-nvim language servers

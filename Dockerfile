@@ -45,18 +45,17 @@ COPY entrypoint /entrypoint
 RUN set -ex && \
     # Install neovim plugin dependencies
     apk add --update --no-cache \
-    clang clang-extra-tools \
-    python3 py3-pip \
-    git \
-    curl \
-    openssh-client && \
-    rm -rf /root/.ssh && \
+      clang clang-extra-tools \
+      python3 py3-pip \
+      git \
+      curl \
+      openssh-client && \
     # Install pipenv and install python dependencies
     pip install -U pip && \
     pip install pipenv && \
     pipenv install && \
     # Install vim-plug and load plugins
-    curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
+    curl -fLo ~/.config/nvim/site/autoload/plug.vim \
         https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim && \
     nvim --headless +PlugInstall +qa && \
     # Install coc-nvim language servers

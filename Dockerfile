@@ -1,5 +1,7 @@
+# This stage builds neovim
 FROM alpine:latest AS build_nvim
 
+# Install build dependencies
 RUN apk add --update --no-cache \
     git \
     build-base \
@@ -13,29 +15,25 @@ RUN apk add --update --no-cache \
     unzip \
     gettext-tiny-dev
 
+# Clone neovim and install latest version
 RUN git clone https://github.com/neovim/neovim && \
     cd neovim && \
     make CMAKE_BUILD_TYPE=RelWithDebInfo && \
     make install
 
-FROM node:18-alpine
 
-ENV XDG_DATA_HOME=/root/.config
+# This stage sets up the neovim plugins and developer environment
+FROM node:18-alpine
 
 ARG NAME
 ARG EMAIL
 
+ENV XDG_DATA_HOME=/root/.config
+
+# Copy neovim from build stage
 COPY --from=build_nvim /usr/local/bin/nvim /usr/local/bin/nvim
 COPY --from=build_nvim /usr/local/share/nvim /usr/local/share/nvim
 COPY --from=build_nvim /usr/local/lib/nvim /usr/local/lib/nvim
-
-RUN apk add --update --no-cache \
-    clang clang-extra-tools \
-    python3 py3-pip \
-    git \
-    curl \
-    openssh-client && \
-    rm -rf /root/.ssh
 
 WORKDIR /root
 
@@ -45,6 +43,14 @@ COPY .ssh .ssh
 COPY entrypoint /entrypoint
 
 RUN set -ex && \
+    # Install neovim plugin dependencies
+    apk add --update --no-cache \
+    clang clang-extra-tools \
+    python3 py3-pip \
+    git \
+    curl \
+    openssh-client && \
+    rm -rf /root/.ssh && \
     # Install pipenv and install python dependencies
     pip install -U pip && \
     pip install pipenv && \
@@ -69,4 +75,5 @@ RUN set -ex && \
 WORKDIR /app
 
 ENTRYPOINT ["/entrypoint"]
+
 CMD ["nvim"]

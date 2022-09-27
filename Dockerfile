@@ -21,7 +21,6 @@ RUN git clone https://github.com/neovim/neovim && \
 FROM node:18-alpine
 
 ENV XDG_DATA_HOME=/root/.config
-ENV SSH_KEY=id_ed25519
 
 ARG NAME
 ARG EMAIL
@@ -62,7 +61,7 @@ RUN set -ex && \
     # Configure git
     git config --global commit.gpgsign true && \
     git config --global gpg.format ssh && \
-    git config --global user.signingkey "$(cat .ssh/$SSH_KEY.pub)" && \
+    git config --global user.signingkey "$(ls .ssh/*.pub | head -n1 | cat)" && \
     git config --global user.name "$NAME" && \
     git config --global user.email "$EMAIL" && \
     chmod +x /entrypoint

@@ -16,8 +16,8 @@ To build the image, you'll need to:
 
 ```bash
 docker build \
-  --build-arg NAME="Floyd Everest" \
-  --build-arg EMAIL="me@floydeverest.com" \
+  --build-arg NAME="Full Name" \
+  --build-arg EMAIL="your@email.address" \
   -t nvim .
 ```
 

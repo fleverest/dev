@@ -66,7 +66,7 @@ RUN set -ex && \
     # Configure git
     git config --global commit.gpgsign true && \
     git config --global gpg.format ssh && \
-    git config --global user.signingkey "$(ls .ssh/*.pub | head -n1 | cat)" && \
+    git config --global user.signingkey "$(ls -d .ssh/*.pub | head -n1 | cat)" && \
     git config --global user.name "$NAME" && \
     git config --global user.email "$EMAIL" && \
     chmod +x /entrypoint

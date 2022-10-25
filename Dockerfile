@@ -56,7 +56,7 @@ RUN set -ex && \
     # Install pipenv and install python dependencies
     pip install -U pip && \
     pip install pipenv && \
-    pipenv install && \
+    pipenv install --system && \
     # Install vim-plug and load plugins
     curl -fLo ~/.config/nvim/site/autoload/plug.vim --create-dirs \
         https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim && \

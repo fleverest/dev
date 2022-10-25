@@ -40,16 +40,19 @@ WORKDIR /root
 COPY Pipfile* .
 COPY .config .config
 COPY .ssh .ssh
+COPY .zshrc .zshrc
 COPY entrypoint /entrypoint
 
 RUN set -ex && \
     # Install neovim plugin dependencies
     apk add --update --no-cache \
-      clang clang-extra-tools \
+      clang clang-extra-tools cmake ninja \
+      R \
       python3 py3-pip \
       git \
       curl \
-      openssh-client && \
+      openssh-client \
+      zsh tree ripgrep mcfly && \
     # Install pipenv and install python dependencies
     pip install -U pip && \
     pip install pipenv && \
@@ -66,13 +69,17 @@ RUN set -ex && \
     # Configure git
     git config --global commit.gpgsign true && \
     git config --global gpg.format ssh && \
-    git config --global user.signingkey "$(ls -d .ssh/*.pub | head -n1 | cat)" && \
+    git config --global user.signingkey "~/$(ls -d .ssh/*.pub | head -n1 | cat)" && \
     git config --global user.name "$NAME" && \
     git config --global user.email "$EMAIL" && \
+    # Install antigen for zsh config
+    curl -L git.io/antigen > /root/antigen.zsh && \
+    touch .zsh_history && \
+    zsh -c "source /root/.zshrc" && \
     chmod +x /entrypoint
 
 WORKDIR /app
 
 ENTRYPOINT ["/entrypoint"]
 
-CMD ["nvim"]
+CMD ["zsh"]

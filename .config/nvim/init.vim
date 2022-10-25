@@ -43,7 +43,7 @@ call plug#begin('~/.config/nvim/site/autoload')
   Plug 'airblade/vim-gitgutter'
   " OneDark Theme for pretty highlights
   Plug 'joshdick/onedark.vim'
-  "coc
+  " coc.nvim
   Plug 'neoclide/coc.nvim', {'branch': 'release'}
 call plug#end()
 

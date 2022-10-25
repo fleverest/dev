@@ -13,14 +13,43 @@ RUN apk add --update --no-cache \
     coreutils \
     curl \
     unzip \
-    gettext-tiny-dev
-
-# Clone neovim and install latest version
-RUN git clone https://github.com/neovim/neovim && \
+    gettext-tiny-dev && \
+    git clone https://github.com/neovim/neovim && \
     cd neovim && \
     make CMAKE_BUILD_TYPE=RelWithDebInfo && \
     make install
 
+# This stage builds R
+FROM alpine:latest as build_r
+
+ENV R_VERSION=4.2.1
+
+# Install build dependencies
+RUN apk add --update --no-cache \
+    clang libc-dev libstdc++ gfortran make curl curl-dev \
+    libx11-dev libxt-dev zlib zlib-dev bzip2 bzip2-dev xz-dev pcre2 pcre2-dev \
+    cairo-dev libpng-dev jpeg-dev tiff-dev readline-dev texlive && \
+    ln -sv "$(which clang++)" /lib/cpp
+
+WORKDIR /tmp/R
+
+RUN curl -O https://cran.rstudio.com/src/base/R-4/R-${R_VERSION}.tar.gz && \
+    tar -xzvf R-${R_VERSION}.tar.gz && \
+    cd R-${R_VERSION} && \
+    CFLAGS="-std=gnu99 -Wall -pedantic" \
+    CXXFLAGS="-Wall -pedantic" \
+    CC="clang" \
+    CXX="clang++" \
+    ./configure \
+      --prefix=/usr \
+      --enable-memory-profiling \
+      --enable-R-shlib \
+      --enable-R-static-lib \
+      --with-recommended-packages \
+      --with-blas \
+      --with-lapack && \
+    make && \
+    make install
 
 # This stage sets up the neovim plugins and developer environment
 FROM node:18-alpine
@@ -35,6 +64,13 @@ COPY --from=build_nvim /usr/local/bin/nvim /usr/local/bin/nvim
 COPY --from=build_nvim /usr/local/share/nvim /usr/local/share/nvim
 COPY --from=build_nvim /usr/local/lib/nvim /usr/local/lib/nvim
 
+# Copy R from build stage
+COPY --from=build_r /usr/bin/R /usr/bin/R
+COPY --from=build_r /usr/bin/Rscript /usr/bin/Rscript
+COPY --from=build_r /usr/share/man/man1 /usr/share/man/man1
+COPY --from=build_r /usr/share/man/man1 /usr/share/man/man1
+COPY --from=build_r /usr/lib/R /usr/lib/R
+
 WORKDIR /root
 
 COPY Pipfile* .
@@ -46,16 +82,18 @@ COPY entrypoint /entrypoint
 RUN set -ex && \
     # Install neovim plugin dependencies
     apk add --update --no-cache \
-      clang clang-extra-tools cmake ninja \
-      R \
+      # C/C++
+      clang clang-extra-tools libc-dev libstdc++ \
+      # R dependencies
+      gfortran libxt libintl tiff cairo texlive \
+      # make/cmake/ninja for managing C/C++ projects
+      make cmake ninja \
+      # Python
       python3 py3-pip \
-      git \
-      curl \
-      openssh-client \
-      zsh tree ripgrep mcfly && \
-    # Install pipenv and install python dependencies
-    pip install -U pip && \
-    pip install pipenv && \
+      # Shell and other tools
+      zsh tree ripgrep mcfly git curl openssh-client && \
+    # Install pipenv and python packages
+    pip install -U pip pipenv && \
     pipenv install --system && \
     # Install vim-plug and load plugins
     curl -fLo ~/.config/nvim/site/autoload/plug.vim --create-dirs \
@@ -69,7 +107,8 @@ RUN set -ex && \
     # Configure git
     git config --global commit.gpgsign true && \
     git config --global gpg.format ssh && \
-    git config --global user.signingkey "~/$(ls -d .ssh/*.pub | head -n1 | cat)" && \
+    git config --global \
+      user.signingkey "~/$(ls -d .ssh/*.pub | head -n1 | cat)" && \
     git config --global user.name "$NAME" && \
     git config --global user.email "$EMAIL" && \
     # Install antigen for zsh config

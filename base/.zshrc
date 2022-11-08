@@ -20,6 +20,11 @@ antigen bundle zsh-users/zsh-syntax-highlighting
 # Tell Antigen that you're done
 antigen apply
 
+################################################################################
+
+export LANG="C.UTF-8"
+export TZ=Australia/Melbourne
+
 # Start mcfly
 eval "$(mcfly init zsh)"
 export MCFLY_KEY_SCHEME=vim

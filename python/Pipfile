@@ -4,9 +4,8 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-pyright = "*"
 pre-commit = "*"
-radian = "*"
+pyright = "*"
 
 [dev-packages]
 

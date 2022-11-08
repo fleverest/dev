@@ -29,6 +29,7 @@ docker build \
 
 Then you can build any of the other development enviroments, for example my
 R environment:
+
 ```base
 docker build \
     -t fleverest/dev:r \
@@ -41,7 +42,7 @@ To use the container, simply mount your working directory to `/app` in
 the container:
 
 ```bash
-docker run -it --rm -v .:/app dev
+docker run -it --rm -v .:/app fleverest/dev:base
 ```
 
 I suggest making aliases for this, for example:

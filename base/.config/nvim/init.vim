@@ -45,7 +45,27 @@ call plug#begin('~/.config/nvim/site/autoload')
   Plug 'joshdick/onedark.vim'
   " coc.nvim
   Plug 'neoclide/coc.nvim', {'branch': 'release'}
+  " clang-format
+  Plug 'rhysd/vim-clang-format'
 call plug#end()
+
+" Coc
+" GoTo code navigation.
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+" Diagnostic navigation
+try
+    nmap <silent> [c :call CocAction('diagnosticNext')<cr>
+    nmap <silent> ]c :call CocAction('diagnosticPrevious')<cr>
+endtry
+
+" clang-format
+autocmd FileType c,h,cpp nnoremap <buffer><Leader>cf :<C-u>ClangFormat<CR>
+autocmd FileType c,h,cpp vnoremap <buffer><Leader>cf :ClangFormat<CR>
+" Toggle auto formatting:
+nmap <C-c> :ClangFormatAutoToggle<CR>
 
 " NERDTree
 nnoremap <C-t> :NERDTreeToggle<CR>

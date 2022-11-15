@@ -12,7 +12,7 @@ rootless](https://rootlesscontaine.rs).
 
 This repository defines images for various development environments. To build
 any of these images, you'll first need to build the base image. To do so, place
-your SSH key (public and private keys) in the `.ssh/` directory. This SSH key
+one SSH key (public and private key) in the `base/.ssh/` directory. This SSH key
 should ideally be known to and trusted by your remotes. For example, if you
 work on GitHub, you can navigate to `Account > Settings > SSH and GPG keys`
 and add the public key as a new "SSH Key" (and optionally as a "signing key"
@@ -38,7 +38,14 @@ docker build \
 
 ## Using the container(s)
 
-To use the container, simply mount your working directory to `/app` in
+You may need to edit the permissions for the directory to provide write access
+to the container user. In Podman you can do the following:
+
+```bash
+podman unshare chmod -R $UID:$UID .
+```
+
+To use the container, you will need to mount your working directory to `/app` in
 the container:
 
 ```bash

@@ -1,13 +1,13 @@
 # This stage builds R
-FROM fleverest/dev:base as build_r
+FROM fleverest/dev:base
 
 ENV R_VERSION=4.2.1
 
-COPY Pipfile* .
-
+USER root
 WORKDIR /tmp/R
 
-RUN pacman -Squyy --noconfirm \
+RUN set -ex && \
+    pacman -Squyy --noconfirm \
       clang clang-tools-extra which gcc-fortran make cmake ninja perl libx11 libxt cairo pkg-config libpng \
       libjpeg-turbo libtiff texlive-core && \
     ln -sv "$(whereis clang++)" /lib/cpp && \
@@ -26,10 +26,18 @@ RUN pacman -Squyy --noconfirm \
       --with-recommended-packages && \
     make -j 4 && \
     make install && \
-    cd /root && \
-    rm -rf /tmp/R && \
+    cd / && \
+    rm -rf /tmp/R
+
+USER dev
+WORKDIR /home/dev
+COPY Pipfile* .
+
+RUN set -ex && \
+    export PATH=$PATH:~/.local/bin && \
     pipenv install --system && \
     # language servers
+    R -e "dir.create(Sys.getenv('R_LIBS_USER'), recursive = TRUE)" && \
     R -e "install.packages('languageserver', repos='https://cran.r-project.org')" && \
     nvim --headless +'CocInstall -sync \
       coc-r-lsp coc-clangd' +qa

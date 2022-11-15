@@ -1,5 +1,5 @@
 # Antigen plugin manager
-source "/root/antigen.zsh"
+source "/home/dev/antigen.zsh"
 
 # phi theme
 antigen theme https://github.com/LasaleFamine/phi-zsh-theme phi.zsh-theme
@@ -24,6 +24,7 @@ antigen apply
 
 export LANG="C.UTF-8"
 export TZ=Australia/Melbourne
+export PATH=$PATH:~/.local/bin
 
 # Start mcfly
 eval "$(mcfly init zsh)"

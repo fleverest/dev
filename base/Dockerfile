@@ -63,7 +63,7 @@ RUN set -ex && \
     pwd && \
     ls -a && \
     git config --global commit.gpgsign true && \
-    git config --global gpg.format openssh && \
+    git config --global gpg.format ssh && \
     git config --global \
       user.signingkey "$(ls -d ~/.ssh/*.pub | head -n1 | cat)" && \
     git config --global user.name "$NAME" && \

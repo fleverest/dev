@@ -8,8 +8,9 @@ WORKDIR /tmp/R
 
 RUN set -ex && \
     pacman -Squyy --noconfirm \
-      clang clang-tools-extra which gcc-fortran make cmake ninja perl libx11 libxt cairo pkg-config libpng \
-      libjpeg-turbo libtiff texlive-core && \
+      clang clang-tools-extra which gcc-fortran make cmake ninja perl \
+      libx11 libxt cairo pkg-config libpng libjpeg-turbo libtiff \
+      fribidi texlive-core && \
     ln -sv "$(whereis clang++)" /lib/cpp && \
     curl -O https://cran.rstudio.com/src/base/R-4/R-${R_VERSION}.tar.gz && \
     tar -xzvf R-${R_VERSION}.tar.gz && \

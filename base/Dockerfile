@@ -8,10 +8,11 @@ RUN set -ex && \
       make \
       cmake \
       pkgconf \
+      libtool \
       unzip && \
     cd $(mktemp -d) && \
     git clone https://github.com/neovim/neovim . \
-      -b master --single-branch --depth 1 && \
+      -b stable --single-branch --depth 1 && \
     make CMAKE_BUILD_TYPE=RelWithDebInfo && \
     make install
 

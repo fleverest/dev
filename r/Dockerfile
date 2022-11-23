@@ -32,7 +32,7 @@ RUN set -ex && \
 
 USER dev
 WORKDIR /home/dev
-COPY Pipfile* .
+COPY --chown=dev:dev Pipfile* .
 
 RUN set -ex && \
     export PATH=$PATH:~/.local/bin && \

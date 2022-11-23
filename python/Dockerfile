@@ -1,11 +1,13 @@
 FROM fleverest/dev:base
 
-WORKDIR /root
-
-COPY Pipfile* .
+WORKDIR /home/dev
+COPY --chown=dev:dev Pipfile* .
 
 # Just install global python dependencies.
 RUN set -ex && \
-    pipenv install --system
+    export PATH=$PATH:~/.local/bin && \
+    pipenv install --system && \
+    nvim --headless +'CocInstall-sync \
+      coc-pyright' +qa
 
 WORKDIR /app

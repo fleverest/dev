@@ -34,7 +34,7 @@ RUN set -ex && \
       # Python dependencies
       python-pip \
       # Shell and other tools
-      zsh tree ripgrep mcfly git keychain sudo openssh && \
+      zsh tree ripgrep mcfly git keychain sudo openssh tmux && \
     chmod +x /entrypoint && \
     useradd -m -G wheel dev && \
     sed -i /etc/sudoers -e "/^# %wheel /s/^# //g"
@@ -45,6 +45,7 @@ COPY --chown=dev:dev Pipfile* .
 COPY --chown=dev:dev .config .config
 COPY --chown=dev:dev .ssh .ssh
 COPY --chown=dev:dev .zshrc .zshrc
+COPY --chown=dev:dev .tmux.conf .tmux.conf
 
 ARG NAME
 ARG EMAIL

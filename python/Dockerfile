@@ -6,6 +6,7 @@ COPY --chown=dev:dev Pipfile* .
 # Just install global python dependencies.
 RUN set -ex && \
     export PATH=$PATH:~/.local/bin && \
+    sudo pacman -Squyy --noconfirm clang make cmake pyenv && \
     pipenv install --system && \
     nvim --headless +'CocInstall-sync \
       coc-pyright' +qa

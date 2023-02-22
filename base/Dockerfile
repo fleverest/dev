@@ -70,6 +70,7 @@ RUN set -ex && \
       user.signingkey "$(ls -d ~/.ssh/*.pub | head -n1 | cat)" && \
     git config --global user.name "$NAME" && \
     git config --global user.email "$EMAIL" && \
+    git config --global core.editor "nvim" && \
     # Install antigen for zsh config
     curl -L git.io/antigen > /home/dev/antigen.zsh && \
     touch .zsh_history && \

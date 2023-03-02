@@ -10,7 +10,7 @@ RUN set -ex && \
     pacman -Squyy --noconfirm \
       clang clang-tools-extra which gcc-fortran make cmake ninja perl \
       libx11 libxt cairo xorg-fonts-100dpi xorg-fonts-75dpi pkg-config \
-      libpng libjpeg-turbo libtiff fribidi texlive-core && \
+      libpng libjpeg-turbo libtiff fribidi texlive-core pandoc && \
     ln -sv "$(whereis clang++)" /lib/cpp && \
     curl -O https://cran.rstudio.com/src/base/R-4/R-${R_VERSION}.tar.gz && \
     tar -xzvf R-${R_VERSION}.tar.gz && \

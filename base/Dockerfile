@@ -32,7 +32,7 @@ RUN set -ex && \
       # Node for coc.nvim
       nodejs-lts-hydrogen yarn \
       # Python dependencies
-      python-pip \
+      python-pip python-pipenv pyenv \
       # Shell and other tools
       zsh tree ripgrep mcfly git keychain sudo openssh tmux && \
     chmod +x /entrypoint && \
@@ -51,9 +51,8 @@ ARG NAME
 ARG EMAIL
 
 RUN set -ex && \
-    pip install -U pip pipenv && \
     export PATH=$PATH:/home/dev/.local/bin && \
-    pipenv install --system && \
+    pipenv install && \
     # Install vim-plug and load plugins
     curl -fLo ~/.config/nvim/site/autoload/plug.vim --create-dirs \
         https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim && \

@@ -37,7 +37,7 @@ COPY --chown=dev:dev .Rprofile .
 
 RUN set -ex && \
     export PATH=$PATH:~/.local/bin && \
-    pipenv install --system && \
+    pipenv install && \
     # language servers
     R -e "dir.create(Sys.getenv('R_LIBS_USER'), recursive = TRUE)" && \
     R -e "install.packages('languageserver', repos='https://cran.r-project.org')" && \

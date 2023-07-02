@@ -7,7 +7,7 @@ COPY --chown=dev:dev Pipfile* .
 RUN set -ex && \
     export PATH=$PATH:~/.local/bin && \
     sudo pacman -Squyy --noconfirm clang make cmake pyenv && \
-    pipenv install --system && \
+    pipenv install && \
     nvim --headless +'CocInstall-sync \
       coc-pyright' +qa
 

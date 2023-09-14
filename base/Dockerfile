@@ -34,7 +34,7 @@ RUN set -ex && \
       # Python dependencies
       python-pip python-pipenv pyenv \
       # Shell and other tools
-      zsh tree ripgrep mcfly git keychain sudo openssh tmux && \
+      zsh tree ripgrep which mcfly git keychain sudo openssh tmux && \
     chmod +x /entrypoint && \
     useradd -m -G wheel dev && \
     sed -i /etc/sudoers -e "/^# %wheel /s/^# //g"

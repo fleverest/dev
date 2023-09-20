@@ -32,16 +32,16 @@ RUN set -ex && \
       # Node for coc.nvim
       nodejs-lts-hydrogen yarn \
       # Python dependencies
-      python-pip python-pipenv pyenv \
+      pyenv python-pip python-pipx python-pre-commit \
       # Shell and other tools
-      zsh tree ripgrep which mcfly git keychain sudo openssh tmux && \
+      zsh tree ripgrep which mcfly git keychain sudo openssh tmux less && \
     chmod +x /entrypoint && \
     useradd -m -G wheel dev && \
     sed -i /etc/sudoers -e "/^# %wheel /s/^# //g"
 
 USER dev
+
 WORKDIR /home/dev
-COPY --chown=dev:dev Pipfile* .
 COPY --chown=dev:dev .config .config
 COPY --chown=dev:dev .ssh .ssh
 COPY --chown=dev:dev .zshrc .zshrc
@@ -52,7 +52,6 @@ ARG EMAIL
 
 RUN set -ex && \
     export PATH=$PATH:/home/dev/.local/bin && \
-    pipenv install && \
     # Install vim-plug and load plugins
     curl -fLo ~/.config/nvim/site/autoload/plug.vim --create-dirs \
         https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim && \
